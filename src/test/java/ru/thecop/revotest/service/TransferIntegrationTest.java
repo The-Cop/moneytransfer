@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ru.thecop.revotest.Application;
+import ru.thecop.revotest.api.dto.ErrorDto;
 import ru.thecop.revotest.api.dto.TransferDto;
 import ru.thecop.revotest.model.Account;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 
 public class TransferIntegrationTest {
     RestClient client = new RestClient();
@@ -48,6 +50,18 @@ public class TransferIntegrationTest {
 
         Account b = findByNumber("B", accounts);
         assertEquals(0, b.getAmount().compareTo(initialAmountB.add(BigDecimal.ONE)));
+    }
+
+    @Test
+    public void testTransferError() {
+        TransferDto transferDto = new TransferDto();
+        transferDto.setFrom("A");
+        transferDto.setTo("A");
+        transferDto.setAmount(BigDecimal.ONE);
+
+        Response response = client.transfer(transferDto);
+        ErrorDto errorDto = response.readEntity(ErrorDto.class);
+        assertNotNull(errorDto.getError());
     }
 
     @Test
@@ -117,5 +131,4 @@ public class TransferIntegrationTest {
     private Account findByNumber(String number, Account[] array) {
         return Arrays.stream(array).filter(acc -> acc.getNumber().equals(number)).findAny().get();
     }
-    //TODO test error response
 }
