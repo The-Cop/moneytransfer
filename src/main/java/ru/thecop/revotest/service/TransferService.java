@@ -112,13 +112,8 @@ public class TransferService {
             dao.getSession().clear();
 
             from = dao.getById(from.getId(), true);
-//            try {
-//                Thread.sleep(30);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
             to = dao.getById(to.getId(), true);
-            // TODO remove sleep
+
             from.setAmount(from.getAmount().subtract(amount));
             to.setAmount(to.getAmount().add(amount));
         } catch (Exception e) {

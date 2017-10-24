@@ -14,10 +14,8 @@ public class TransferRetryService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransferRetryService.class);
 
-    // TODO set normal delay
     private static final RetryPolicy RETRY_POLICY = new RetryPolicy()
             .retryOn(TransferException.class)
-//            .withDelay(1, TimeUnit.SECONDS)
             .withDelay(300, TimeUnit.MILLISECONDS)
             .withMaxRetries(3);
 

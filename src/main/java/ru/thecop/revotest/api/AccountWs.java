@@ -30,7 +30,6 @@ public class AccountWs {
         this.transferRetryService = transferRetryService;
     }
 
-    // TODO remove unnecessary methods
     // TODO do not return all accounts
 
     @POST

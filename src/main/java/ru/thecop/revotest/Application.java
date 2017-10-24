@@ -8,7 +8,6 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.thecop.revotest.guice.AppModule;
 import ru.thecop.revotest.guice.AppServletModule;
 
 import javax.servlet.DispatcherType;
@@ -34,7 +33,7 @@ public class Application {
 
         ServletContextHandler ctx = new ServletContextHandler(server, "/", ServletContextHandler.NO_SESSIONS);
 
-        Injector injector = Guice.createInjector(new AppModule(), new AppServletModule());
+        Injector injector = Guice.createInjector(new AppServletModule());
 
         FilterHolder guiceFilter = new FilterHolder(injector.getInstance(GuiceFilter.class));
         ctx.addFilter(guiceFilter, "/*", EnumSet.allOf(DispatcherType.class));
