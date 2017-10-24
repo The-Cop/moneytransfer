@@ -17,12 +17,6 @@ public class TransferService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransferService.class);
 
-    //TODO test nulls in account numbers
-    //TODO test null in amount
-    //TODO test negative amount
-    //TODO test zero amount
-    //TODO test equal accounts numbers
-
     private AccountDao dao;
 
     @Inject
