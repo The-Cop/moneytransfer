@@ -1,4 +1,4 @@
-##Task
+## Task
 Design and implement a RESTful API (including data model and the backing implementation) for money
 transfers between accounts.
 
@@ -16,7 +16,7 @@ Implicit requirements:
 1. the code produced by you is expected to be of high quality.
 2. there are no detailed requirements, use common sense.
 
-##Stack
+## Stack
 
 - Jetty
 - Jersey
@@ -25,7 +25,7 @@ Implicit requirements:
 - Hibernate
 - H2 in-memory
 
-####Some used materials:
+#### Some used materials:
 
 [Jersey + Jetty + Guice + Jackson](http://blog.palominolabs.com/2011/08/15/a-simple-java-web-stack-with-guice-jetty-jersey-and-jackson/index.html)
 
