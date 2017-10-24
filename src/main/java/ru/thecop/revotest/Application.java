@@ -21,15 +21,12 @@ public class Application {
     public static void main(String[] args) throws Exception {
         Server server = new Server(8081);
 
-        ServletContextHandler ctx = new ServletContextHandler(server,"/",ServletContextHandler.NO_SESSIONS);
+        ServletContextHandler ctx = new ServletContextHandler(server, "/", ServletContextHandler.NO_SESSIONS);
 
         Injector injector = Guice.createInjector(new AppModule(), new AppServletModule());
 
         FilterHolder guiceFilter = new FilterHolder(injector.getInstance(GuiceFilter.class));
         ctx.addFilter(guiceFilter, "/*", EnumSet.allOf(DispatcherType.class));
-
-
-
 
 //        h2();
 
@@ -37,7 +34,7 @@ public class Application {
         server.join();
     }
 
-    private static void h2(){
+    private static void h2() {
         try {
             DataSource ds = JdbcConnectionPool.create("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "user", "password");
             Connection conn = ds.getConnection();

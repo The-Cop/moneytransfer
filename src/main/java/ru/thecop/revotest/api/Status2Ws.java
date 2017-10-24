@@ -24,7 +24,7 @@ public class Status2Ws {
     }
 
     @GET
-    public String getStatus(){
+    public String getStatus() {
         return "server ok 2: " + someBean.say();
     }
 }

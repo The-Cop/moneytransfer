@@ -1,17 +1,18 @@
 package ru.thecop.revotest.api;
 
 import com.google.inject.Singleton;
+import ru.thecop.revotest.api.dto.StatusDto;
 import ru.thecop.revotest.hibernate.SomeBean;
+import ru.thecop.revotest.util.Constants;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 @Singleton
 @Path(StatusWs.PATH)
-@Produces(MediaType.TEXT_PLAIN)
+@Produces(Constants.MEDIATYPE_JSON_UTF8)
 public class StatusWs {
 
     public static final String PATH = "/status";
@@ -24,7 +25,9 @@ public class StatusWs {
     }
 
     @GET
-    public String getStatus(){
-        return "server ok: " + someBean.say();
+    public StatusDto getStatus() {
+        StatusDto status = new StatusDto();
+        status.setStatus("С сервером все хорошо. server ok: " + someBean.say());
+        return status;
     }
 }
