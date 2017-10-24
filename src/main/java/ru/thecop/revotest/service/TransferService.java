@@ -23,8 +23,12 @@ public class TransferService {
     //TODO test zero amount
     //TODO test equal accounts numbers
 
-    @Inject
     private AccountDao dao;
+
+    @Inject
+    public TransferService(AccountDao dao) {
+        this.dao = dao;
+    }
 
     @Transactional
     public void transfer(String accountNumberFrom, String accountNumberTo, BigDecimal amount) {

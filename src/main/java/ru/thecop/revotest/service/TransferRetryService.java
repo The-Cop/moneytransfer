@@ -21,8 +21,12 @@ public class TransferRetryService {
 //            .withDelay(2, TimeUnit.MILLISECONDS)
             .withMaxRetries(3);
 
-    @Inject
     private TransferService transferService;
+
+    @Inject
+    public TransferRetryService(TransferService transferService) {
+        this.transferService = transferService;
+    }
 
     public void transferWithRetry(String accountNumberFrom, String accountNumberTo, BigDecimal amount) {
         Failsafe.with(RETRY_POLICY)

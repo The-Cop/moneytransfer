@@ -15,8 +15,6 @@ public class StatusWs {
 
     public static final String PATH = "/status";
 
-
-
     @GET
     public StatusDto getStatus() {
         StatusDto status = new StatusDto();

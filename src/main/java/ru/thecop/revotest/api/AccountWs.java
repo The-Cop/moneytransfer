@@ -5,7 +5,6 @@ import ru.thecop.revotest.api.dto.TransferDto;
 import ru.thecop.revotest.model.Account;
 import ru.thecop.revotest.service.AccountService;
 import ru.thecop.revotest.service.TransferRetryService;
-import ru.thecop.revotest.service.TransferService;
 import ru.thecop.revotest.util.Constants;
 
 import javax.inject.Inject;
@@ -22,13 +21,18 @@ public class AccountWs {
 
     public static final String PATH = "/accounts";
 
-    @Inject
     private AccountService accountService;
+    private TransferRetryService transferRetryService;
 
     @Inject
-    private TransferService transferService;
-    @Inject
-    private TransferRetryService transferRetryService;
+    public AccountWs(AccountService accountService,
+                     TransferRetryService transferRetryService) {
+        this.accountService = accountService;
+        this.transferRetryService = transferRetryService;
+    }
+
+    // TODO remove unnecessary methods
+    // TODO do not return all accounts
 
     @GET
     @Path("/new")

@@ -13,8 +13,12 @@ import java.util.List;
 public class AccountService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
 
-    @Inject
     private AccountDao accountDao;
+
+    @Inject
+    public AccountService(AccountDao accountDao) {
+        this.accountDao = accountDao;
+    }
 
     @Transactional
     public Account createAcccount() {
