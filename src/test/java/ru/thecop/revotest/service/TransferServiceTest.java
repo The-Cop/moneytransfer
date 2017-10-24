@@ -28,8 +28,8 @@ public class TransferServiceTest {
         TransferService transferService = new TransferService(dao);
         BigDecimal transferAmount = new BigDecimal(13);
         transferService.transfer(ACCOUNT_1_NUMBER, ACCOUNT_2_NUMBER, transferAmount);
-        assertEquals(dao.findByNumber(ACCOUNT_1_NUMBER).getAmount(), ACCOUNT_1_AMOUNT.subtract(transferAmount));
-        assertEquals(dao.findByNumber(ACCOUNT_2_NUMBER).getAmount(), ACCOUNT_2_AMOUNT.add(transferAmount));
+        assertEquals(ACCOUNT_1_AMOUNT.subtract(transferAmount), dao.findByNumber(ACCOUNT_1_NUMBER).getAmount());
+        assertEquals(ACCOUNT_2_AMOUNT.add(transferAmount), dao.findByNumber(ACCOUNT_2_NUMBER).getAmount());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -101,8 +101,8 @@ public class TransferServiceTest {
 
         when(dao.findByNumber(ACCOUNT_1_NUMBER)).thenReturn(a);
         when(dao.findByNumber(ACCOUNT_2_NUMBER)).thenReturn(b);
-        when(dao.getById(eq(1L), anyBoolean())).thenReturn(a);
-        when(dao.getById(eq(2L), anyBoolean())).thenReturn(b);
+        when(dao.getByNaturalId(eq(ACCOUNT_1_NUMBER), anyBoolean())).thenReturn(a);
+        when(dao.getByNaturalId(eq(ACCOUNT_2_NUMBER), anyBoolean())).thenReturn(b);
         when(dao.getSession()).thenReturn(mock(Session.class));
 
         return dao;

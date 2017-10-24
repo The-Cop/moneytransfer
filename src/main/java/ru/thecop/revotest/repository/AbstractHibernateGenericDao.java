@@ -47,6 +47,10 @@ abstract class AbstractHibernateGenericDao<E extends AbstractEntity, ID extends 
         return prepareIdentifierLoadAccess(shouldLock).load(id);
     }
 
+    public E getByNaturalId(Object naturalId, boolean shouldLock) {
+        return prepareNaturalIdLoadAccess(shouldLock).load(naturalId);
+    }
+
     private IdentifierLoadAccess<E> prepareIdentifierLoadAccess(boolean shouldLock) {
         IdentifierLoadAccess<E> loadAccess = getSession().byId(entityClass);
         if (shouldLock) {
@@ -55,6 +59,13 @@ abstract class AbstractHibernateGenericDao<E extends AbstractEntity, ID extends 
         return loadAccess;
     }
 
+    private SimpleNaturalIdLoadAccess<E> prepareNaturalIdLoadAccess(boolean shouldLock) {
+        SimpleNaturalIdLoadAccess<E> loadAccess = getSession().bySimpleNaturalId(entityClass);
+        if (shouldLock) {
+            loadAccess.with(LockOptions.UPGRADE);
+        }
+        return loadAccess;
+    }
 
     @SuppressWarnings("unchecked")
     public List<E> findAll() {
@@ -64,5 +75,4 @@ abstract class AbstractHibernateGenericDao<E extends AbstractEntity, ID extends 
     protected Criteria createCriteria() {
         return getSession().createCriteria(entityClass);
     }
-
 }

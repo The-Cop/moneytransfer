@@ -1,11 +1,13 @@
 package ru.thecop.revotest.model;
 
+import org.hibernate.annotations.NaturalId;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
-public class Account extends AbstractEntity{
+public class Account extends AbstractEntity {
     private String number;
     private BigDecimal amount;
 
@@ -22,6 +24,7 @@ public class Account extends AbstractEntity{
 
     @NotNull
     @Column(unique = true)
+    @NaturalId
     public String getNumber() {
         return number;
     }

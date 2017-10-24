@@ -52,30 +52,22 @@ public class TransferService {
             throw new IllegalArgumentException("Amount can not be zero or negative");
         }
 
-        Account from = findByNumberOrThrow(accountNumberFrom);
-        Account to = findByNumberOrThrow(accountNumberTo);
-
-        if (from.getAmount().compareTo(amount) < 0) {
-            LOGGER.error("Insufficient funds on account {}: {}, transfer amount {}", accountNumberFrom, from.getAmount(), amount);
-            throw new InsufficientFundsException();
-        }
-
         //get or create lock
         String key1;
         String key2;
-        if (from.getNumber().compareTo(to.getNumber()) < 0) {
-            key1 = from.getNumber();
-            key2 = to.getNumber();
+        if (accountNumberFrom.compareTo(accountNumberTo) < 0) {
+            key1 = accountNumberFrom;
+            key2 = accountNumberTo;
         } else {
-            key1 = to.getNumber();
-            key2 = from.getNumber();
+            key1 = accountNumberTo;
+            key2 = accountNumberFrom;
         }
 
         Lock lock1;
         Lock lock2;
         try {
-            lock1 = locks.get(key1, () -> new ReentrantLock());
-            lock2 = locks.get(key2, () -> new ReentrantLock());
+            lock1 = locks.get(key1, ReentrantLock::new);
+            lock2 = locks.get(key2, ReentrantLock::new);
         } catch (ExecutionException e) {
             LOGGER.error("ExecutionException trying to acquire locks", e);
             throw new RuntimeException(e);
@@ -85,12 +77,10 @@ public class TransferService {
             if (lock1.tryLock(LOCK_WAIT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)) {
                 if (lock2.tryLock(LOCK_WAIT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)) {
                     try {
-                        LOGGER.debug("Locked {} and {}", key1, key2);
-                        transferCore(from, to, amount);
+                        doTransfer(accountNumberFrom, accountNumberTo, amount);
                     } finally {
                         lock1.unlock();
                         lock2.unlock();
-                        LOGGER.debug("Unlocked {} and {}", key1, key2);
                     }
                 } else {
                     lock1.unlock();
@@ -106,30 +96,33 @@ public class TransferService {
         LOGGER.info("Successful transfer from {} to {} amount {}", accountNumberFrom, accountNumberTo, amount);
     }
 
-    private void transferCore(Account from, Account to, BigDecimal amount) {
+    private void doTransfer(String accountNumberFrom, String accountNumberTo, BigDecimal amount) {
         try {
-            //clear session cache to get actual data from db
-            dao.getSession().clear();
-
-            from = dao.getById(from.getId(), true);
-            to = dao.getById(to.getId(), true);
+            Account from = dao.getByNaturalId(accountNumberFrom, true);
+            checkAndThrowAccountNotFound(from, accountNumberFrom);
+            if (from.getAmount().compareTo(amount) < 0) {
+                LOGGER.error("Insufficient funds on account {}: {}, transfer amount {}", from.getAmount(), from.getAmount(), amount);
+                throw new InsufficientFundsException();
+            }
+            Account to = dao.getByNaturalId(accountNumberTo, true);
+            checkAndThrowAccountNotFound(to, accountNumberTo);
 
             from.setAmount(from.getAmount().subtract(amount));
             to.setAmount(to.getAmount().add(amount));
+        } catch (InsufficientFundsException | AccountNotFoundException e) {
+            throw e;
         } catch (Exception e) {
-            LOGGER.error("Failed to transfer from " + from.getNumber()
-                    + " to " + to.getNumber()
+            LOGGER.error("Failed to transfer from " + accountNumberFrom
+                    + " to " + accountNumberTo
                     + " amount " + amount, e);
             throw new TransferException(e);
         }
     }
 
-    private Account findByNumberOrThrow(String number) {
-        Account acc = dao.findByNumber(number);
+    private void checkAndThrowAccountNotFound(Account acc, String number) {
         if (acc == null) {
             LOGGER.error("Failed to find account {}", number);
             throw new AccountNotFoundException(number);
         }
-        return acc;
     }
 }

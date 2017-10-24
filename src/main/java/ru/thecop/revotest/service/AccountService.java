@@ -7,7 +7,6 @@ import ru.thecop.revotest.model.Account;
 import ru.thecop.revotest.repository.AccountDao;
 
 import javax.inject.Inject;
-import java.math.BigDecimal;
 import java.util.List;
 
 public class AccountService {
@@ -18,17 +17,6 @@ public class AccountService {
     @Inject
     public AccountService(AccountDao accountDao) {
         this.accountDao = accountDao;
-    }
-
-    @Transactional
-    public Account createAcccount() {
-        Account a = new Account();
-        a.setAmount(BigDecimal.valueOf(666.13));
-        a.setNumber(System.currentTimeMillis() + "");
-
-        accountDao.create(a);
-        LOGGER.debug("Created account: {}", a);
-        return a;
     }
 
     @Transactional

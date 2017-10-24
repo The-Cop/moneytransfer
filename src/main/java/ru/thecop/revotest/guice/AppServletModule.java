@@ -13,19 +13,17 @@ import ru.thecop.revotest.provider.IllegalArgumentExceptionMapper;
 import ru.thecop.revotest.provider.InsufficientFundsExceptionMapper;
 import ru.thecop.revotest.provider.TransferExceptionMapper;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class AppServletModule extends ServletModule {
 
     private void bindServlets() {
         bind(AccountWs.class);
     }
 
+    @SuppressWarnings("PointlessBinding")//exception mappers need to be bound explicitly
     @Override
     protected void configureServlets() {
         super.configureServlets();
-        //Requst logging JUL -> Slf4j bridge
+        //Request logging JUL -> Slf4j bridge
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
 
@@ -36,17 +34,11 @@ public class AppServletModule extends ServletModule {
         bind(IllegalArgumentExceptionMapper.class);
         bindServlets();
 
-        //persistence
         install(new JpaPersistModule("default"));
-        final Map<String, String> params = new HashMap<String, String>();
-//        params.put(ResourceConfig.PROPERTY_CONTAINER_REQUEST_FILTERS, LoggingFilter.class.getName());
-//        params.put(ResourceConfig.PROPERTY_CONTAINER_RESPONSE_FILTERS, LoggingFilter.class.getName());
-//        bind(LoggingFilter.class);
-        serve("/api/*").with(GuiceContainer.class, params);
 
+        serve("/api/*").with(GuiceContainer.class);
 
         bind(JacksonJsonProvider.class).in(Scopes.SINGLETON);
         filter("/api/*").through(PersistFilter.class);
-//        filter("/api/*").through(LoggingFilter.class);
     }
 }

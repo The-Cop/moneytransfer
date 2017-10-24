@@ -10,7 +10,7 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 @Singleton
-public class TransferExceptionMapper implements ExceptionMapper<TransferException>{
+public class TransferExceptionMapper implements ExceptionMapper<TransferException> {
 
     @Override
     public Response toResponse(TransferException exception) {

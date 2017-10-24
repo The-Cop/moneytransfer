@@ -29,7 +29,8 @@ public class TransferRetryService {
     public void transferWithRetry(String accountNumberFrom, String accountNumberTo, BigDecimal amount) {
         Failsafe.with(RETRY_POLICY)
                 .onFailedAttempt((throwable) -> {
-                    LOGGER.error("Failed attempt to transfer from {} to {} amount {}, message: {}", accountNumberFrom, accountNumberTo, amount, throwable.getMessage());
+                    LOGGER.error("Failed attempt to transfer from {} to {} amount {}, message: {}",
+                            accountNumberFrom, accountNumberTo, amount, throwable.getMessage());
                 })
                 .run(() -> {
                     LOGGER.info("Trying to transfer from {} to {} amount {}", accountNumberFrom, accountNumberTo, amount);
