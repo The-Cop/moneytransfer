@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ru.thecop.revotest.Application;
-import ru.thecop.revotest.api.dto.StatusDto;
 import ru.thecop.revotest.api.dto.TransferDto;
 import ru.thecop.revotest.model.Account;
 
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.concurrent.*;
 
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
 
 public class TransferIntegrationTest {
     RestClient client = new RestClient();
@@ -30,12 +28,6 @@ public class TransferIntegrationTest {
     @After
     public void tearDown() throws Exception {
         Application.stop();
-    }
-
-    @Test
-    public void testStatus() {
-        StatusDto statusDto = client.getStatus();
-        assertNotNull(statusDto);
     }
 
     @Test
