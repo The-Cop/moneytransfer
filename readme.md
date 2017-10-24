@@ -16,7 +16,16 @@ Implicit requirements:
 1. the code produced by you is expected to be of high quality.
 2. there are no detailed requirements, use common sense.
 
-####Used materials:
+##Stack
+
+- Jetty
+- Jersey
+- Guice
+- Jackson
+- Hibernate
+- H2 in-memory
+
+####Some used materials:
 
 [Jersey + Jetty + Guice + Jackson](http://blog.palominolabs.com/2011/08/15/a-simple-java-web-stack-with-guice-jetty-jersey-and-jackson/index.html)
 
