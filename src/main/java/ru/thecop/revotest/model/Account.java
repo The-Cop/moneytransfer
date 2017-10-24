@@ -5,13 +5,11 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
-public class Account {
-    private Long id;
+public class Account extends AbstractEntity{
     private String number;
     private BigDecimal amount;
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "acc_seq")
     @SequenceGenerator(name = "acc_seq", sequenceName = "acc_seq", allocationSize = 1)
     public Long getId() {
@@ -23,6 +21,7 @@ public class Account {
     }
 
     @NotNull
+    @Column(unique = true)
     public String getNumber() {
         return number;
     }
