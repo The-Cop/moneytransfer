@@ -1,10 +1,9 @@
 package ru.thecop.revotest.api;
 
 import com.google.inject.Singleton;
-import com.google.inject.persist.Transactional;
 import ru.thecop.revotest.model.Account;
-import ru.thecop.revotest.repository.AccountDao;
-import ru.thecop.revotest.repository.InTransactionExecutor;
+import ru.thecop.revotest.service.AccountService;
+import ru.thecop.revotest.service.TransferService;
 import ru.thecop.revotest.util.Constants;
 
 import javax.inject.Inject;
@@ -12,7 +11,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Singleton
@@ -23,35 +21,48 @@ public class AccountWs {
     public static final String PATH = "/accounts";
 
     @Inject
-    private AccountDao accountDao;
+    private AccountService accountService;
 
     @Inject
-    private InTransactionExecutor inTransactionExecutor;
+    private TransferService transferService;
 
     @GET
     @Path("/new")
-    @Transactional
     public Account createAcccount() {
-        return inTransactionExecutor.executeInTransaction(() -> {
-            Account a = new Account();
-            a.setAmount(BigDecimal.valueOf(666.13));
-            a.setNumber(System.currentTimeMillis()+"");
-
-            accountDao.create(a);
-            System.out.println("Persisted: " + a);
-            return a;
-        });
+        return accountService.createAcccount();
     }
 
+    @GET
+    @Path("/ab")
+    public List<Account> ab() {
+        transferService.transfer2("A", "B", 1);
+        return accountService.all();
+    }
+
+    @GET
+    @Path("/ba")
+    public List<Account> ba() {
+        transferService.transfer2("B", "A", 1);
+        return accountService.all();
+    }
+
+    @GET
+    @Path("/{from}/{to}")
+    public List<Account> ab(@PathParam("from") String from, @PathParam("to") String to) {
+        transferService.transfer2(from, to, 1);
+        return accountService.all();
+    }
+
+    //
     @GET
     @Path("/")
     public List<Account> all() {
-        return inTransactionExecutor.executeInTransaction(() -> accountDao.findAll());
+        return accountService.all();
     }
-
-    @GET
-    @Path("/{accNum}")
-    public Account all(@PathParam("accNum") String accountNumber) {
-        return inTransactionExecutor.executeInTransaction(() -> accountDao.findByNumber(accountNumber));
-    }
+//
+//    @GET
+//    @Path("/{accNum}")
+//    public Account all(@PathParam("accNum") String accountNumber) {
+//        return inTransactionExecutor.executeInTransaction(() -> accountDao.findByNumber(accountNumber));
+//    }
 }
