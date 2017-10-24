@@ -24,8 +24,8 @@ public class TransferService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TransferService.class);
     private static final long LOCK_WAIT_TIMEOUT_MILLIS = 500;
 
-    private AccountDao dao;
-    private Cache<String, Lock> locks = CacheBuilder.newBuilder()
+    private final AccountDao dao;
+    private final Cache<String, Lock> locks = CacheBuilder.newBuilder()
             .expireAfterAccess(60, TimeUnit.SECONDS)
             .maximumSize(10000)
             .build();
@@ -100,10 +100,12 @@ public class TransferService {
         try {
             Account from = dao.getByNaturalId(accountNumberFrom, true);
             checkAndThrowAccountNotFound(from, accountNumberFrom);
+
             if (from.getAmount().compareTo(amount) < 0) {
                 LOGGER.error("Insufficient funds on account {}: {}, transfer amount {}", from.getAmount(), from.getAmount(), amount);
                 throw new InsufficientFundsException();
             }
+
             Account to = dao.getByNaturalId(accountNumberTo, true);
             checkAndThrowAccountNotFound(to, accountNumberTo);
 

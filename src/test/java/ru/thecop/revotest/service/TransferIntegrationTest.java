@@ -20,7 +20,7 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
 public class TransferIntegrationTest {
-    RestClient client = new RestClient();
+    private final RestClient client = new RestClient();
 
     @Before
     public void startup() throws Exception {
@@ -93,9 +93,7 @@ public class TransferIntegrationTest {
             for (Future<Response> future : futures) {
                 future.get();
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 

@@ -24,8 +24,8 @@ public class AccountWs {
 
     public static final String PATH = "/accounts";
 
-    private AccountService accountService;
-    private TransferRetryService transferRetryService;
+    private final AccountService accountService;
+    private final TransferRetryService transferRetryService;
 
     @Inject
     public AccountWs(AccountService accountService,
@@ -39,12 +39,6 @@ public class AccountWs {
     public List<Account> transfer(TransferDto transferDto) {
         transferRetryService.transferWithRetry(transferDto.getFrom(), transferDto.getTo(), transferDto.getAmount());
         return Lists.newArrayList(accountService.find(transferDto.getFrom()), accountService.find(transferDto.getTo()));
-    }
-
-    @GET
-    @Path("/")
-    public List<Account> all() {
-        return accountService.all();
     }
 
     @GET

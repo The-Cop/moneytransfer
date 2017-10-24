@@ -19,7 +19,7 @@ public class TransferRetryService {
             .withDelay(300, TimeUnit.MILLISECONDS)
             .withMaxRetries(3);
 
-    private TransferService transferService;
+    private final TransferService transferService;
 
     @Inject
     public TransferRetryService(TransferService transferService) {

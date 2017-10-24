@@ -1,4 +1,4 @@
-package ru.thecop.revotest.provider;
+package ru.thecop.revotest.mapper;
 
 import com.google.inject.Singleton;
 import ru.thecop.revotest.api.dto.ErrorDto;

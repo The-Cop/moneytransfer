@@ -8,10 +8,10 @@ import com.google.inject.servlet.ServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import ru.thecop.revotest.api.AccountWs;
-import ru.thecop.revotest.provider.AccountNotFoundExceptionMapper;
-import ru.thecop.revotest.provider.IllegalArgumentExceptionMapper;
-import ru.thecop.revotest.provider.InsufficientFundsExceptionMapper;
-import ru.thecop.revotest.provider.TransferExceptionMapper;
+import ru.thecop.revotest.mapper.AccountNotFoundExceptionMapper;
+import ru.thecop.revotest.mapper.IllegalArgumentExceptionMapper;
+import ru.thecop.revotest.mapper.InsufficientFundsExceptionMapper;
+import ru.thecop.revotest.mapper.TransferExceptionMapper;
 
 public class AppServletModule extends ServletModule {
 
