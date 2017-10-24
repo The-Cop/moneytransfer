@@ -1,6 +1,7 @@
 package ru.thecop.revotest.service;
 
 import com.google.inject.persist.Transactional;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.thecop.revotest.exception.AccountNotFoundException;
@@ -29,11 +30,18 @@ public class TransferService {
     public void transfer(String accountNumberFrom, String accountNumberTo, BigDecimal amount) {
         LOGGER.info("Transfer from {} to {} amount {}", accountNumberFrom, accountNumberTo, amount);
 
+        if (StringUtils.isBlank(accountNumberFrom) || StringUtils.isBlank(accountNumberTo)) {
+            throw new IllegalArgumentException("Both accounts must be specified");
+        }
+        if (accountNumberFrom.equals(accountNumberTo)) {
+            throw new IllegalArgumentException("Accounts must be different");
+        }
+        if (amount == null) {
+            throw new IllegalArgumentException("Amount must be specified");
+        }
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Amount can not be zero or negative");
         }
-        //TODO check accounts equals
-        //TODO check accounts nulls
 
         Account from = findByNumberOrThrow(accountNumberFrom);
         Account to = findByNumberOrThrow(accountNumberTo);
@@ -68,7 +76,7 @@ public class TransferService {
             // TODO log stacktrace
             LOGGER.error("Failed to transfer from " + accountNumberFrom
                     + " to " + accountNumberTo
-                    + " amount " + amount + ": "+e.getMessage());
+                    + " amount " + amount + ": " + e.getMessage());
             throw new TransferException(e);
         }
         LOGGER.info("Successful transfer from {} to {} amount {}", accountNumberFrom, accountNumberTo, amount);
