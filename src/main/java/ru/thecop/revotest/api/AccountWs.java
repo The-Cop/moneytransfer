@@ -3,6 +3,7 @@ package ru.thecop.revotest.api;
 import com.google.inject.Singleton;
 import ru.thecop.revotest.model.Account;
 import ru.thecop.revotest.service.AccountService;
+import ru.thecop.revotest.service.TransferRetryService;
 import ru.thecop.revotest.service.TransferService;
 import ru.thecop.revotest.util.Constants;
 
@@ -25,6 +26,8 @@ public class AccountWs {
 
     @Inject
     private TransferService transferService;
+    @Inject
+    private TransferRetryService transferRetryService;
 
     @GET
     @Path("/new")
@@ -35,21 +38,21 @@ public class AccountWs {
     @GET
     @Path("/ab")
     public List<Account> ab() {
-        transferService.transfer2("A", "B", 1);
+        transferRetryService.transferWithRetry("A", "B", 1);
         return accountService.all();
     }
 
     @GET
     @Path("/ba")
     public List<Account> ba() {
-        transferService.transfer2("B", "A", 1);
+        transferRetryService.transferWithRetry("B", "A", 1);
         return accountService.all();
     }
 
     @GET
     @Path("/{from}/{to}")
     public List<Account> ab(@PathParam("from") String from, @PathParam("to") String to) {
-        transferService.transfer2(from, to, 1);
+        transferRetryService.transferWithRetry(from, to, 1);
         return accountService.all();
     }
 

@@ -84,6 +84,12 @@
             <version>5.2.11.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.jodah</groupId>
+            <artifactId>failsafe</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+
 
     </dependencies>
 
