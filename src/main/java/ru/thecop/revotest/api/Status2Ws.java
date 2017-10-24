@@ -10,21 +10,21 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Singleton
-@Path(StatusWs.PATH)
+@Path(Status2Ws.PATH)
 @Produces(MediaType.TEXT_PLAIN)
-public class StatusWs {
+public class Status2Ws {
 
-    public static final String PATH = "/status";
+    public static final String PATH = "/status2";
 
     private SomeBean someBean;
 
     @Inject
-    public StatusWs(SomeBean someBean) {
+    public Status2Ws(SomeBean someBean) {
         this.someBean = someBean;
     }
 
     @GET
     public String getStatus(){
-        return "server ok: " + someBean.say();
+        return "server ok 2: " + someBean.say();
     }
 }
