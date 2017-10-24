@@ -1,6 +1,8 @@
 package ru.thecop.revotest.service;
 
 import com.google.inject.persist.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.thecop.revotest.exception.TransferException;
 import ru.thecop.revotest.model.Account;
 import ru.thecop.revotest.repository.AccountDao;
@@ -10,16 +12,14 @@ import java.math.BigDecimal;
 
 public class TransferService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransferService.class);
+
     @Inject
     private AccountDao dao;
 
     @Transactional
-    public void transfer2(String accountNumberFrom, String accountNumberTo, double value) {
-        System.out.println("Transferring from "
-                + accountNumberFrom
-                + " to "
-                + accountNumberTo
-                + ", session = ");
+    public void transfer(String accountNumberFrom, String accountNumberTo, double amount) {
+        LOGGER.info("Transfer from {} to {} amount {}", accountNumberFrom, accountNumberTo, amount);
 
         Account from = dao.findByNumber(accountNumberFrom);
 
@@ -34,16 +34,16 @@ public class TransferService {
             to = dao.getById(to.getId(), true);
             //TODO check if accounts not null
             // TODO check if account has enough money
-            from.setAmount(from.getAmount().subtract(BigDecimal.valueOf(value)));
-            to.setAmount(to.getAmount().add(BigDecimal.valueOf(value)));
+            from.setAmount(from.getAmount().subtract(BigDecimal.valueOf(amount)));
+            to.setAmount(to.getAmount().add(BigDecimal.valueOf(amount)));
             dao.update(from);
             dao.update(to);
         } catch (Exception e) {
-            System.out.println("Failed to transfer: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.error("Failed to transfer from " + accountNumberFrom
+                    + " to " + accountNumberTo
+                    + " amount " + amount, e);
             throw new TransferException(e);
         }
+        LOGGER.info("Successful transfer from {} to {} amount {}", accountNumberFrom, accountNumberTo, amount);
     }
-
-
 }
