@@ -8,6 +8,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+//TODO remove class
 @Singleton
 @Path(StatusWs.PATH)
 @Produces(Constants.MEDIATYPE_JSON_UTF8)

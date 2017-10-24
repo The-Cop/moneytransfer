@@ -1,5 +1,6 @@
 package ru.thecop.revotest.api.dto;
 
+//TODO remove class
 public class StatusDto {
     private String status;
 

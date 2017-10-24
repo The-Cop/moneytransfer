@@ -15,7 +15,7 @@ public class TransferExceptionMapper implements ExceptionMapper<TransferExceptio
     @Override
     public Response toResponse(TransferException exception) {
         ErrorDto dto = new ErrorDto();
-        dto.setError("Failed to transfer: another transaction pending, try again later.");
+        dto.setError("Failed to transfer: possibly another transaction pending, try again later.");
         return Response.status(Response.Status.CONFLICT).entity(dto).build();
     }
 }
