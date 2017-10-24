@@ -1,10 +1,7 @@
 package ru.thecop.revotest.repository;
 
 import com.google.inject.Provider;
-import org.hibernate.Criteria;
-import org.hibernate.IdentifierLoadAccess;
-import org.hibernate.LockOptions;
-import org.hibernate.Session;
+import org.hibernate.*;
 import ru.thecop.revotest.model.AbstractEntity;
 
 import javax.inject.Inject;
@@ -26,7 +23,7 @@ abstract class AbstractHibernateGenericDao<E extends AbstractEntity, ID extends 
         entityClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    protected Session getSession() {
+    public Session getSession() {
         return em.get().unwrap(Session.class);
     }
 

@@ -20,6 +20,7 @@ public class TransferService {
     //TODO test null in amount
     //TODO test negative amount
     //TODO test zero amount
+    //TODO test equal accounts numbers
 
     @Inject
     private AccountDao dao;
@@ -31,6 +32,8 @@ public class TransferService {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Amount can not be zero or negative");
         }
+        //TODO check accounts equals
+        //TODO check accounts nulls
 
         Account from = findByNumberOrThrow(accountNumberFrom);
         Account to = findByNumberOrThrow(accountNumberTo);
@@ -41,15 +44,17 @@ public class TransferService {
         }
 
         try {
+            //clear session cache to get actual data from db
+            dao.getSession().clear();
 
             from = dao.getById(from.getId(), true);
-            to = dao.getById(to.getId(), true);
-            // TODO remove sleep
             try {
-                Thread.sleep(2000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            to = dao.getById(to.getId(), true);
+            // TODO remove sleep
 
             LOGGER.debug("Before From: {}", from.toString());
             LOGGER.debug("Before To: {}", to.toString());

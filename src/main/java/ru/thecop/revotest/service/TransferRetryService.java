@@ -17,8 +17,8 @@ public class TransferRetryService {
     // TODO set normal delay
     private static final RetryPolicy RETRY_POLICY = new RetryPolicy()
             .retryOn(TransferException.class)
-//            .withDelay(2, TimeUnit.SECONDS)
-            .withDelay(2, TimeUnit.MILLISECONDS)
+            .withDelay(1, TimeUnit.SECONDS)
+//            .withDelay(2, TimeUnit.MILLISECONDS)
             .withMaxRetries(3);
 
     @Inject
