@@ -1,6 +1,7 @@
 package ru.thecop.revotest.service;
 
 import com.google.inject.persist.Transactional;
+import ru.thecop.revotest.exception.TransferException;
 import ru.thecop.revotest.model.Account;
 import ru.thecop.revotest.repository.AccountDao;
 
@@ -22,7 +23,7 @@ public class TransferService {
 
         Account from = dao.findByNumber(accountNumberFrom);
 
-//        try {
+        try {
             Account to = dao.findByNumber(accountNumberTo);
             from = dao.getById(from.getId(), true);
             try {
@@ -37,8 +38,10 @@ public class TransferService {
             to.setAmount(to.getAmount().add(BigDecimal.valueOf(value)));
             dao.update(from);
             dao.update(to);
-//        } catch (Exception e) {
-//            System.out.println("Failed to transfer: " + e.getMessage());
-//        }
+        } catch (Exception e) {
+            System.out.println("Failed to transfer: " + e.getMessage());
+            e.printStackTrace();
+            throw new TransferException(e);
+        }
     }
 }

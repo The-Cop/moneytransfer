@@ -8,6 +8,7 @@ import com.google.inject.servlet.ServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import ru.thecop.revotest.api.AccountWs;
 import ru.thecop.revotest.api.StatusWs;
+import ru.thecop.revotest.provider.TransferExceptionMapper;
 
 public class AppServletModule extends ServletModule {
 
@@ -20,6 +21,7 @@ public class AppServletModule extends ServletModule {
     protected void configureServlets() {
         super.configureServlets();
         bind(GuiceContainer.class);
+        bind(TransferExceptionMapper.class);
         bindServlets();
 
         //persistence
