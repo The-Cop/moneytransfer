@@ -17,8 +17,8 @@ public class TransferRetryService {
     // TODO set normal delay
     private static final RetryPolicy RETRY_POLICY = new RetryPolicy()
             .retryOn(TransferException.class)
-            .withDelay(1, TimeUnit.SECONDS)
-//            .withDelay(2, TimeUnit.MILLISECONDS)
+//            .withDelay(1, TimeUnit.SECONDS)
+            .withDelay(300, TimeUnit.MILLISECONDS)
             .withMaxRetries(3);
 
     private TransferService transferService;
@@ -31,7 +31,7 @@ public class TransferRetryService {
     public void transferWithRetry(String accountNumberFrom, String accountNumberTo, BigDecimal amount) {
         Failsafe.with(RETRY_POLICY)
                 .onFailedAttempt((throwable) -> {
-                    LOGGER.error("Failed attempt to transfer from {} to {} amount {}", accountNumberFrom, accountNumberTo, amount);
+                    LOGGER.error("Failed attempt to transfer from {} to {} amount {}, message: {}", accountNumberFrom, accountNumberTo, amount, throwable.getMessage());
                 })
                 .run(() -> {
                     LOGGER.info("Trying to transfer from {} to {} amount {}", accountNumberFrom, accountNumberTo, amount);

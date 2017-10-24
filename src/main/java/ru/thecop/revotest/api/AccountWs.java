@@ -10,7 +10,6 @@ import ru.thecop.revotest.util.Constants;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Singleton
@@ -34,33 +33,6 @@ public class AccountWs {
     // TODO remove unnecessary methods
     // TODO do not return all accounts
 
-    @GET
-    @Path("/new")
-    public Account createAcccount() {
-        return accountService.createAcccount();
-    }
-
-    @GET
-    @Path("/ab")
-    public List<Account> ab() {
-        transferRetryService.transferWithRetry("A", "B", BigDecimal.ONE);
-        return accountService.all();
-    }
-
-    @GET
-    @Path("/ba")
-    public List<Account> ba() {
-        transferRetryService.transferWithRetry("B", "A", BigDecimal.ONE);
-        return accountService.all();
-    }
-
-    @GET
-    @Path("/{from}/{to}")
-    public List<Account> ab(@PathParam("from") String from, @PathParam("to") String to) {
-        transferRetryService.transferWithRetry(from, to, BigDecimal.ONE);
-        return accountService.all();
-    }
-
     @POST
     @Path("/transfer")
     public List<Account> transfer(TransferDto transferDto) {
@@ -72,5 +44,11 @@ public class AccountWs {
     @Path("/")
     public List<Account> all() {
         return accountService.all();
+    }
+
+    @GET
+    @Path("/info/{number}")
+    public Account info(@PathParam("number") String number) {
+        return accountService.find(number);
     }
 }

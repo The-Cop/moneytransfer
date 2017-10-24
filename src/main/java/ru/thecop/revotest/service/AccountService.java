@@ -32,6 +32,11 @@ public class AccountService {
     }
 
     @Transactional
+    public Account find(String number) {
+        return accountDao.findByNumber(number);
+    }
+
+    @Transactional
     public List<Account> all() {
         return accountDao.findAll();
     }

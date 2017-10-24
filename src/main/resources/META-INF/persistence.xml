@@ -17,7 +17,7 @@
             <property name="hibernate.hbm2ddl.auto" value="create-drop" />
             <property name="hibernate.hbm2ddl.import_files" value="init.sql" />
             <!-- <property name="hibernate.show_sql" value="true" /> -->
-            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.show_sql" value="false" />
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
         </properties>
